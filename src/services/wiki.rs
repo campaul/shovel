@@ -35,6 +35,9 @@ pub fn create<'a>(connection: &PgConnection, slug: &'a str, title: &'a str, body
         .expect("Error saving new post")
 }
 
+pub fn update<'a>(connection: &PgConnection, slug: &'a str, title: &String, body: &String) {
+}
+
 pub fn get(connection: &PgConnection, slug: &str) -> Option<Page> {
     use data::schema::pages::dsl;
 

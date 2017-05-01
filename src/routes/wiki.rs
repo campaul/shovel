@@ -7,6 +7,10 @@ use hyper::mime:: {
 use iron::prelude::*;
 use iron::Handler;
 use iron::status;
+use params::{
+    Params,
+    Value,
+};
 use router::Router;
 use tera::Context;
 
@@ -43,7 +47,22 @@ pub struct IndexPost {
 
 impl Handler for IndexPost {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        // TODO: Update DB
+        let map = req.get::<Params>().unwrap();
+        let title = iexpect!(match map.find(&["title"]) {
+            Some(&Value::String(ref title)) => Some(title),
+            _ => None,
+        });
+        let body = iexpect!(match map.find(&["body"]) {
+            Some(&Value::String(ref body)) => Some(body),
+            _ => None,
+        });
+
+        {
+            let slug = req.extensions.get::<Router>().unwrap().find("page").unwrap();
+            let pool = itry!(self.app.pool.get());
+            services::wiki::update(&pool, slug, title, body);
+        }
+
         render(req, &self.app, "wiki/index.html")
     }
 }

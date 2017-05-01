@@ -3,6 +3,7 @@
 extern crate dotenv;
 extern crate hyper;
 #[macro_use] extern crate iron;
+extern crate params;
 extern crate r2d2;
 extern crate r2d2_diesel;
 extern crate router;
