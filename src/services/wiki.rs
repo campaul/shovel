@@ -4,6 +4,7 @@ use diesel::pg::PgConnection;
 
 use data::models;
 
+#[derive(Serialize)]
 pub struct Page {
     pub slug: String,
     pub title: String,
