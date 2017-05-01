@@ -36,6 +36,16 @@ pub fn create<'a>(connection: &PgConnection, slug: &'a str, title: &'a str, body
 }
 
 pub fn update<'a>(connection: &PgConnection, slug: &'a str, title: &String, body: &String) {
+    use data::schema::pages::dsl;
+
+    diesel::update(dsl::pages.filter(dsl::slug.eq(slug)))
+        .set(dsl::title.eq(title))
+        .get_result::<models::Page>(connection)
+        .unwrap();
+    diesel::update(dsl::pages.filter(dsl::slug.eq(slug)))
+        .set(dsl::body.eq(body))
+        .get_result::<models::Page>(connection)
+        .unwrap();
 }
 
 pub fn get(connection: &PgConnection, slug: &str) -> Option<Page> {
