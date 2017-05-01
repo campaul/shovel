@@ -13,42 +13,47 @@ use tera::Context;
 use Application;
 use services;
 
-pub struct Index {
-    pub app: Application,
-}
-
-impl Handler for Index {
-    fn handle(&self, req: &mut Request) -> IronResult<Response> {
+fn render(req: &mut Request, app: &Application, template: &str) -> IronResult<Response> {
         let ref slug = req.extensions.get::<Router>().unwrap().find("page").unwrap();
-        let pool = itry!(self.app.pool.get());
+        let pool = itry!(app.pool.get());
         let page = iexpect!(services::wiki::get(&pool, slug));
 
         let mut context = Context::new();
         context.add("page", &page);
-        let body = self.app.tera.render("wiki/index.html", &context).unwrap();
+        let body = app.tera.render(template, &context).unwrap();
 
         let mut resp = Response::with((status::Ok, body));
         resp.headers.set(ContentType(Mime(TopLevel::Text, SubLevel::Html, vec![])));
         Ok(resp)
+}
+
+pub struct IndexGet {
+    pub app: Application,
+}
+
+impl Handler for IndexGet {
+    fn handle(&self, req: &mut Request) -> IronResult<Response> {
+        render(req, &self.app, "wiki/index.html")
     }
 }
 
-pub struct Edit {
+pub struct IndexPost {
     pub app: Application,
 }
 
-impl Handler for Edit {
+impl Handler for IndexPost {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        let ref slug = req.extensions.get::<Router>().unwrap().find("page").unwrap();
-        let pool = itry!(self.app.pool.get());
-        let page = iexpect!(services::wiki::get(&pool, slug));
+        // TODO: Update DB
+        render(req, &self.app, "wiki/index.html")
+    }
+}
 
-        let mut context = Context::new();
-        context.add("page", &page);
-        let body = self.app.tera.render("wiki/edit.html", &context).unwrap();
+pub struct EditGet {
+    pub app: Application,
+}
 
-        let mut resp = Response::with((status::Ok, body));
-        resp.headers.set(ContentType(Mime(TopLevel::Text, SubLevel::Html, vec![])));
-        Ok(resp)
+impl Handler for EditGet {
+    fn handle(&self, req: &mut Request) -> IronResult<Response> {
+        render(req, &self.app, "wiki/edit.html")
     }
 }

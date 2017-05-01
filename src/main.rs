@@ -48,13 +48,17 @@ fn main() {
     let app = Application::new();
     let mut router = Router::new();
 
-    router.get("/wiki/:page", routes::wiki::Index{
+    router.get("/wiki/:page", routes::wiki::IndexGet{
         app: app.clone(),
-    }, "wiki::index");
+    }, "wiki::index::get");
 
-    router.get("/wiki/:page/edit", routes::wiki::Edit{
+    router.post("/wiki/:page", routes::wiki::IndexPost{
         app: app.clone(),
-    }, "wiki::edit");
+    }, "wiki::index::post");
+
+    router.get("/wiki/:page/edit", routes::wiki::EditGet{
+        app: app.clone(),
+    }, "wiki::edit::get");
 
     println!("Running on localhost:3000");
     Iron::new(router).http("localhost:3000").unwrap();
