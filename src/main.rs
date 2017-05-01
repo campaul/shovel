@@ -52,6 +52,10 @@ fn main() {
         app: app.clone(),
     }, "wiki::index");
 
+    router.get("/wiki/:page/edit", routes::wiki::Edit{
+        app: app.clone(),
+    }, "wiki::edit");
+
     println!("Running on localhost:3000");
     Iron::new(router).http("localhost:3000").unwrap();
 }
