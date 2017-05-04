@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Cameron Paul <cpaul37@gmail.com>"]
 
 [dependencies]
+aurelius = "0.3.0"
 diesel = { version = "0.12.0", features = ["postgres"] }
 diesel_codegen = { version = "0.12.0", features = ["postgres"] }
 dotenv = "0.8.0"

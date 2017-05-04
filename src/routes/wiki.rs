@@ -1,3 +1,4 @@
+use aurelius;
 use hyper::header::ContentType;
 use hyper::mime:: {
     Mime,
@@ -17,10 +18,14 @@ use tera::Context;
 use Application;
 use services;
 
-fn render(req: &mut Request, app: &Application, template: &str) -> IronResult<Response> {
+fn render(req: &mut Request, app: &Application, template: &str, raw: bool) -> IronResult<Response> {
         let ref slug = req.extensions.get::<Router>().unwrap().find("page").unwrap();
         let pool = itry!(app.pool.get());
-        let page = iexpect!(services::wiki::get(&pool, slug));
+        let mut page = iexpect!(services::wiki::get(&pool, slug));
+
+        if !raw {
+            page.body = aurelius::markdown::to_html(page.body.as_ref());
+        }
 
         let mut context = Context::new();
         context.add("page", &page);
@@ -37,7 +42,7 @@ pub struct IndexGet {
 
 impl Handler for IndexGet {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        render(req, &self.app, "wiki/index.html")
+        render(req, &self.app, "wiki/index.html", false)
     }
 }
 
@@ -63,7 +68,7 @@ impl Handler for IndexPost {
             services::wiki::update(&pool, slug, title, body);
         }
 
-        render(req, &self.app, "wiki/index.html")
+        render(req, &self.app, "wiki/index.html", false)
     }
 }
 
@@ -73,6 +78,6 @@ pub struct EditGet {
 
 impl Handler for EditGet {
     fn handle(&self, req: &mut Request) -> IronResult<Response> {
-        render(req, &self.app, "wiki/edit.html")
+        render(req, &self.app, "wiki/edit.html", true)
     }
 }
