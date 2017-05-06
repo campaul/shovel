@@ -1,5 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
 <form method="post" action="/wiki/{{ page.slug }}">
     <input type="text" name="title" value="{{ page.title }}" />
     <textarea name="body">{{ page.body }}</textarea>
     <button>Save</button>
 </form>
+{% endblock content %}

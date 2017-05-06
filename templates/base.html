@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <style>
+            body {
+                font-family: sans;
+                margin: 0;
+                color: #222;
+            }
+
+            h1, h2, h3, h4, h5, h6 {
+                font-weight: 200;
+            }
+
+            form {
+                position: absolute;
+                top: 50px;
+                left: 1em;
+                right: 1em;
+                bottom: 1em;
+                display: flex;
+                flex-direction: column;
+                max-width: 40em;
+                margin: auto;
+            }
+
+            input, textarea, button {
+                display: block;
+                border: 1px solid #ccc;
+                border-radius: 2px;
+                padding: 0.25em;
+                margin-top: 1em;
+                box-sizing: border-box;
+            }
+
+            input, textarea {
+                width: 100%;
+            }
+
+            textarea {
+                flex: 1;
+            }
+
+            button {
+                padding-left: 1em;
+                padding-right: 1em;
+                margin-right: 0;
+                margin-left: auto;
+            }
+
+            header {
+                background-color: #384d48;
+                color: #fff;
+                line-height: 50px;
+            }
+
+            header h1 {
+                font-weight: 100;
+                margin: 0;
+            }
+
+            .container {
+                padding-left: 1em;
+                padding-right: 1em;
+                max-width: 40em;
+                margin: auto;
+            }
+
+            .content {
+                border-left: 1px solid;
+            }
+        </style>
+        {% endblock head %}
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <h1>Shovel</h1>
+            </div>
+        </header>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>
