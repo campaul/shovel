@@ -34,7 +34,6 @@ pub struct Application {
 
 impl Application {
     fn new() -> Application {
-        dotenv().ok();
         let config = r2d2::Config::default();
         let manager = ConnectionManager::<PgConnection>::new(env::var("DATABASE_URL").unwrap());
         let pool = r2d2::Pool::new(config, manager).expect("Failed to create pool.");
@@ -47,6 +46,8 @@ impl Application {
 }
 
 fn main() {
+    dotenv().ok();
+
     let app = Application::new();
     let mut router = Router::new();
 
@@ -62,6 +63,6 @@ fn main() {
         app: app.clone(),
     }, "wiki::edit::get");
 
-    println!("Running on localhost:3000");
-    Iron::new(router).http("localhost:3000").unwrap();
+    println!("Shovel running...");
+    Iron::new(router).http(env::var("SOCKET").unwrap()).unwrap();
 }
