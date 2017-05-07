@@ -21,7 +21,7 @@ use services;
 fn render(req: &mut Request, app: &Application, template: &str, raw: bool) -> IronResult<Response> {
         let ref slug = req.extensions.get::<Router>().unwrap().find("page").unwrap();
         let pool = itry!(app.pool.get());
-        let mut page = iexpect!(services::wiki::get(&pool, slug));
+        let mut page = iexpect!(services::wiki::get(&pool, slug), status::NotFound);
 
         if !raw {
             page.body = aurelius::markdown::to_html(page.body.as_ref());
