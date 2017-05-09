@@ -4,6 +4,6 @@
 <form method="post" action="/wiki/{{ page.slug }}">
     <input type="text" name="title" value="{{ page.title }}" />
     <textarea name="body">{{ page.body }}</textarea>
-    <button>Save</button>
+    <button class="right">Save</button>
 </form>
 {% endblock content %}
