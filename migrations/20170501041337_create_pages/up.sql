@@ -4,4 +4,4 @@ CREATE TABLE pages (
   title VARCHAR NOT NULL,
   body TEXT NOT NULL,
   UNIQUE (slug)
-)
+);
